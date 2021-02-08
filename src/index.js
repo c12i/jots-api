@@ -1,8 +1,15 @@
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
 
+require('dotenv').config();
+const db = require('./db');
+
 const app = express();
-const port = process.env.PORT || 4000;
+
+const PORT = process.env.PORT || 4000;
+const DB_HOST = process.env.DB_HOST;
+
+db.connect(DB_HOST);
 
 const typeDefs = gql`
   type Note {
@@ -61,8 +68,8 @@ app.get('/', (req, res) => {
   res.send('Hello');
 });
 
-app.listen(port, () => {
+app.listen(PORT, () => {
   console.log(
-    `Server listening on ${port} | GraphQL playground: ${server.graphqlPath}`
+    `Server listening on ${PORT} | GraphQL playground: ${server.graphqlPath}`
   );
 });
