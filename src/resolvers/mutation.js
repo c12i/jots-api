@@ -49,15 +49,23 @@ module.exports = {
   },
 
   async createNote(_, { content }, { models, user }) {
-    if (!user)
-      throw new ForbiddenError('You must be authenticated to create a note');
+    if (!user) {
+      throw new AuthenticationError(
+        'You must be authenticated to create a note'
+      );
+    }
     return await models.Note.create({
       content,
       author: mongoose.Types.ObjectId(user.id)
     });
   },
 
-  async updateNote(_, { id, content }, { models }) {
+  async updateNote(_, { id, content }, { models, user }) {
+    if (!user) {
+      throw new AuthenticationError(
+        'You must be authenticated to create a note'
+      );
+    }
     return await models.Note.findOneAndUpdate(
       { _id: id },
       { $set: { content } },
@@ -65,9 +73,19 @@ module.exports = {
     );
   },
 
-  async deleteNote(_, { id }, { models, logger }) {
+  async deleteNote(_, { id }, { models, logger, user }) {
+    if (!user)
+      throw new AuthenticationError(
+        'You must be authenticated to create a note'
+      );
     try {
-      await models.Note.findOneAndRemove({ _id: id });
+      const note = await models.Note.findById(id);
+      if (note && String(note.author) !== user.id) {
+        throw new ForbiddenError(
+          "You don't have permissions to delete this note"
+        );
+      }
+      await note.remove();
       return true;
     } catch (error) {
       logger.error(`Error deleting note: ${error.message}`, error.stack);
