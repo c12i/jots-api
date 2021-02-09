@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
 
 const app = express();
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
