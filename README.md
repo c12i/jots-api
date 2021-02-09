@@ -10,10 +10,10 @@ Install
 npm install
 ```
 
-Start database (requires Docker)
+Start database (requires Docker -- auth not yet configured, needs fix)
 
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 Development server
