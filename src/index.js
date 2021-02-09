@@ -6,6 +6,7 @@ const db = require('./db');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 const models = require('./models');
+const getUser = require('./util/get-user');
 
 const PORT = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
@@ -15,8 +16,11 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => {
-    return { models };
+  context: ({ req }) => {
+    const token = req.headers.authorization;
+    const user = getUser(token);
+    console.log(user);
+    return { models, user };
   }
 });
 
