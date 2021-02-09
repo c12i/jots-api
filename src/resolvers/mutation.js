@@ -9,7 +9,7 @@ const {
 const gravatar = require('../util/gravatar');
 
 module.exports = {
-  async signUp(_, { input }, { models }) {
+  async signUp(_, { input }, { models, logger }) {
     let { email, username, password } = input;
     email = email.trim().toLowerCase();
     const salt = await bcrypt.genSalt();
@@ -25,7 +25,7 @@ module.exports = {
       });
       return jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     } catch (error) {
-      console.error(error);
+      logger.error(`Error signing up: ${error.message}`, error.stack);
       throw new Error('Error signing up');
     }
   },
@@ -65,11 +65,12 @@ module.exports = {
     );
   },
 
-  async deleteNote(_, { id }, { models }) {
+  async deleteNote(_, { id }, { models, logger }) {
     try {
       await models.Note.findOneAndRemove({ _id: id });
       return true;
-    } catch (_) {
+    } catch (error) {
+      logger.error(`Error deleting note: ${error.message}`, error.stack);
       return false;
     }
   }
