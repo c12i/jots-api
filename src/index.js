@@ -22,9 +22,11 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app, path: '/gql' });
 
-app.get('/healthz', (req, res) => {
+app.get('/healthz', (_, res) => {
   res.send('OK');
 });
+
+app.use((_, res) => res.status(404).send('404'));
 
 db.connect(DB_HOST);
 
