@@ -60,17 +60,28 @@ module.exports = {
     });
   },
 
-  async updateNote(_, { id, content }, { models, user }) {
+  async updateNote(_, { id, content }, { models, user, logger }) {
     if (!user) {
       throw new AuthenticationError(
         'You must be authenticated to create a note'
       );
     }
-    return await models.Note.findOneAndUpdate(
-      { _id: id },
-      { $set: { content } },
-      { new: true }
-    );
+    try {
+      const note = await models.Note.findById(id);
+      if (note && String(note.author) !== user.id) {
+        throw new ForbiddenError(
+          "You don't have permissions to update this note"
+        );
+      }
+      return await models.Note.findOneAndUpdate(
+        { _id: id },
+        { $set: { content } },
+        { new: true }
+      );
+    } catch (error) {
+      logger.error(`Error updating note: ${error.message}`);
+      throw new Error(error.message);
+    }
   },
 
   async deleteNote(_, { id }, { models, logger, user }) {
