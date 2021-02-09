@@ -5,12 +5,19 @@ require('dotenv').config();
 const db = require('./db');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
+const models = require('./models');
 
 const PORT = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
 
 const app = express();
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => {
+    return { models };
+  }
+});
 
 server.applyMiddleware({ app, path: '/gql' });
 
