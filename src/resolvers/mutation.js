@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const {
   ForbiddenError,
   AuthenticationError
@@ -47,8 +48,13 @@ module.exports = {
     return jwt.sign({ id: user._id }, process.env.JWT_SECRET);
   },
 
-  async createNote(_, { content }, { models }) {
-    return await models.Note.create({ content, author: 'Anon' });
+  async createNote(_, { content }, { models, user }) {
+    if (!user)
+      throw new ForbiddenError('You must be authenticated to create a note');
+    return await models.Note.create({
+      content,
+      author: mongoose.Types.ObjectId(user.id)
+    });
   },
 
   async updateNote(_, { id, content }, { models }) {
