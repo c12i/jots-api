@@ -18,6 +18,8 @@ module.exports = gql`
   }
 
   type Mutation {
-    createNote(input: NewNote!): Note
+    createNote(input: NewNote!): Note!
+    updateNote(id: ID!, content: String!): Note!
+    deleteNote(id: ID!): Boolean!
   }
 `;
