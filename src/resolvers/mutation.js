@@ -144,7 +144,6 @@ module.exports = {
         },
         { new: true }
       );
-      console.log(note._id);
       pubsub.publish(`note-${note._id}`, {
         noteFavorited: note
       });
