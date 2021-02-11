@@ -10,7 +10,17 @@ const notesSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true
-    }
+    },
+    favoriteCount: {
+      type: Number,
+      default: 0
+    },
+    favoritedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
   {
     timestamps: true

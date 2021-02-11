@@ -102,5 +102,44 @@ module.exports = {
       logger.error(`Error deleting note: ${error.message}`, error.stack);
       return false;
     }
+  },
+
+  async toggleFavorite(_, { id }, { models, user }) {
+    if (!user) {
+      throw new AuthenticationError();
+    }
+
+    let noteCheck = await models.Note.findById(id);
+    const hasUser = noteCheck.favoritedBy.includes(user.id);
+
+    // User had previously favorited post
+    if (hasUser) {
+      return await models.Note.findByIdAndUpdate(
+        id,
+        {
+          $pull: {
+            favoritedBy: mongoose.Types.ObjectId(user.id)
+          },
+          $inc: {
+            favoriteCount: -1
+          }
+        },
+        { new: true }
+      );
+    } else {
+      // user has not previously favorited the post
+      return await models.Note.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            favoritedBy: mongoose.Types.ObjectId(user.id)
+          },
+          $inc: {
+            favoriteCount: 1
+          }
+        },
+        { new: true }
+      );
+    }
   }
 };
