@@ -57,4 +57,8 @@ module.exports = gql`
     deleteNote(id: ID!): Boolean!
     toggleFavorite(id: ID!): Note!
   }
+
+  type Subscription {
+    noteFavorited(id: ID!): Note!
+  }
 `;

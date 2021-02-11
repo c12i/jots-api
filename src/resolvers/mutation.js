@@ -104,7 +104,7 @@ module.exports = {
     }
   },
 
-  async toggleFavorite(_, { id }, { models, user }) {
+  async toggleFavorite(_, { id }, { models, user, pubsub }) {
     if (!user) {
       throw new AuthenticationError();
     }
@@ -114,7 +114,7 @@ module.exports = {
 
     // User had previously favorited post
     if (hasUser) {
-      return await models.Note.findByIdAndUpdate(
+      const note = await models.Note.findByIdAndUpdate(
         id,
         {
           $pull: {
@@ -126,9 +126,13 @@ module.exports = {
         },
         { new: true }
       );
+      pubsub.publish(`note-${note._id}`, {
+        noteFavorited: note
+      });
+      return note;
     } else {
       // user has not previously favorited the post
-      return await models.Note.findByIdAndUpdate(
+      const note = await models.Note.findByIdAndUpdate(
         id,
         {
           $push: {
@@ -140,6 +144,11 @@ module.exports = {
         },
         { new: true }
       );
+      console.log(note._id);
+      pubsub.publish(`note-${note._id}`, {
+        noteFavorited: note
+      });
+      return note;
     }
   }
 };

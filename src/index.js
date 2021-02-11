@@ -1,7 +1,8 @@
+const http = require('http');
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, PubSub } = require('apollo-server-express');
 const depthLimit = require('graphql-depth-limit');
 const { createComplexityLimitRule } = require('graphql-validation-complexity');
 require('dotenv').config();
@@ -23,16 +24,36 @@ app.use(helmet());
 app.use(cors());
 app.use(loggerMiddleware);
 
+const pubsub = new PubSub();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  subscriptions: {
+    path: '/ps'
+  },
   validationRules: [depthLimit(5), createComplexityLimitRule(1000)],
-  context: ({ req }) => {
-    const token = req.headers.authorization;
-    const user = getUser(token);
-    return { models, user, logger };
+  context: ({ req, connection }) => {
+    if (connection) {
+      return {
+        models,
+        logger,
+        pubsub
+      };
+    } else {
+      const token = req.headers.authorization;
+      const user = getUser(token);
+      return {
+        models,
+        user,
+        logger,
+        pubsub
+      };
+    }
   }
 });
+
+const httpServer = http.createServer(app);
+server.installSubscriptionHandlers(httpServer);
 
 server.applyMiddleware({ app, path: '/gql' });
 
@@ -44,8 +65,11 @@ app.use((_, res) => res.status(404).send('404'));
 
 db.connect(DB_HOST);
 
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(
-    `Server listening on ${PORT} | GraphQL playground: ${server.graphqlPath}`
+    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+  );
+  console.log(
+    `🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`
   );
 });
