@@ -1,5 +1,5 @@
 {
-    "name": "notedly-api",
+    "name": "jots-api",
     "version": "1.0.0",
     "description": "GraphQL API",
     "main": "src/index.js",

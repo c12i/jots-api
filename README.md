@@ -1,6 +1,6 @@
-## notedly-api
+## jots-api
 
-GraphQL API for notedly
+GraphQL API for jots
 
 ## Usage
 

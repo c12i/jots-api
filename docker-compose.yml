@@ -1,7 +1,7 @@
 version: "3"
 
 networks:
-  notedly_network:
+  jots_network:
     driver: bridge
 
 volumes:
@@ -11,15 +11,15 @@ services:
   mongo:
     image: mongo:4.4.0
     restart: always
-    container_name: notedly_mongodb
+    container_name: jots_mongodb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: notedly
-      MONGO_INITDB_ROOT_PASSWORD: notedly
-      MONGO_INITDB_DATABASE: notedly
+      MONGO_INITDB_ROOT_USERNAME: jots
+      MONGO_INITDB_ROOT_PASSWORD: jots
+      MONGO_INITDB_DATABASE: jots
     volumes:
       - mongodb-data:/data/db/
     ports:
       - "27017:27017"
     networks:
-      - notedly_network
+      - jots_network
     command: [--auth]
