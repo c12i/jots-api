@@ -62,7 +62,7 @@ module.exports = {
     async updateNote(_, { id, content }, { models, user, logger }) {
         if (!user) {
             throw new AuthenticationError(
-                'You must be authenticated to create a note'
+                'You must be authenticated to update a note'
             )
         }
         try {
@@ -86,7 +86,7 @@ module.exports = {
     async deleteNote(_, { id }, { models, logger, user }) {
         if (!user)
             throw new AuthenticationError(
-                'You must be authenticated to create a note'
+                'You must be authenticated to delete a note'
             )
         try {
             const note = await models.Note.findById(id)
