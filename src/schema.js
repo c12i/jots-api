@@ -28,7 +28,7 @@ module.exports = gql`
         favorites: [Note!]!
     }
 
-    input SigUpInput {
+    input SignUpInput {
         username: String!
         email: String!
         password: String!
@@ -50,7 +50,7 @@ module.exports = gql`
     }
 
     type Mutation {
-        signUp(input: SigUpInput!): String!
+        signUp(input: SignUpInput!): String!
         signIn(input: SignInInput!): String!
         createNote(content: String!): Note!
         updateNote(id: ID!, content: String!): Note!
