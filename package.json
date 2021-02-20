@@ -36,6 +36,7 @@
         "express-session": "1.15.6",
         "graphql": "^14.1.1",
         "graphql-depth-limit": "1.1.0",
+        "graphql-import-node": "0.0.4",
         "graphql-iso-date": "^3.6.1",
         "graphql-validation-complexity": "0.2.4",
         "helmet": "3.21.2",

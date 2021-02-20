@@ -5,10 +5,12 @@ const cors = require('cors')
 const { ApolloServer, PubSub } = require('apollo-server-express')
 const depthLimit = require('graphql-depth-limit')
 const { createComplexityLimitRule } = require('graphql-validation-complexity')
+
+require('graphql-import-node/register')
 require('dotenv').config()
 
 const db = require('./db')
-const typeDefs = require('./schema')
+const typeDefs = require('./schema.graphql')
 const resolvers = require('./resolvers')
 const models = require('./models')
 const getUser = require('./util/get-user')
