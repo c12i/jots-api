@@ -1,6 +1,12 @@
-## jots-api
+# jots-api
 
 GraphQL API for jots
+
+Related repositories:
+
+-   [Web](https://github.com/collinsmuriuki/jots-web)
+-   [Desktop](https://github.com/collinsmuriuki/jots-desktop)
+-   [Mobile](https://github.com/collinsmuriuki/jots-mobile)
 
 ## Usage
 
@@ -22,4 +28,4 @@ Development server
 npm run dev
 ```
 
-Feel free to reach out on [mail](murerwacollins@gmail.com) if you have any questions
+Feel free to reach out on [mail](mailto:murerwacollins@gmail.com) if you have any questions
