@@ -37,6 +37,11 @@ input SignInInput {
     password: String!
 }
 
+type AuthOutput {
+    token: String!
+    user: User!
+}
+
 type Query {
     notes: [Note!]!
     noteFeed(cursor: String): NoteFeed
@@ -47,8 +52,8 @@ type Query {
 }
 
 type Mutation {
-    signUp(input: SignUpInput!): String!
-    signIn(input: SignInInput!): String!
+    signUp(input: SignUpInput!): AuthOutput!
+    signIn(input: SignInInput!): AuthOutput!
     createNote(content: String!): Note!
     updateNote(id: ID!, content: String!): Note!
     deleteNote(id: ID!): Boolean!

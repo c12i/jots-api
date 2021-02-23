@@ -20,10 +20,11 @@ module.exports = {
                 avatar,
                 password: hash
             })
-            return jwt.sign(
+            const token = jwt.sign(
                 { id: user._id, admin: user.isAdmin },
                 process.env.JWT_SECRET
             )
+            return { token, user }
         } catch (error) {
             logger.error(`Error signing up: ${error.message}`, error.stack)
             throw new Error('Error signing up')
@@ -47,10 +48,11 @@ module.exports = {
             throw new AuthenticationError('Error Signing In')
         }
 
-        return jwt.sign(
+        const token = jwt.sign(
             { id: user._id, admin: user.isAdmin },
             process.env.JWT_SECRET
         )
+        return { token, user }
     },
 
     async createNote(_, { content }, { models, user }) {
