@@ -70,10 +70,10 @@ app.use((_, res) => res.status(404).send('404'))
 db.connect(DB_HOST)
 
 httpServer.listen(PORT, () => {
-    console.log(
+    logger.info(
         `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
     )
-    console.log(
+    logger.info(
         `🚀 Subscriptions ready at ws://localhost:${PORT}${server.subscriptionsPath}`
     )
 })
