@@ -9,17 +9,16 @@ volumes:
 
 services:
   mongo:
-    image: mongo:4.4.0
+    image: mongo-express:0.54.0
     restart: always
     container_name: jots_mongodb
     environment:
-      MONGO_INITDB_ROOT_USERNAME: jots
-      MONGO_INITDB_ROOT_PASSWORD: jots
-      MONGO_INITDB_DATABASE: jots
+      ME_CONFIG_MONGODB_SERVER: jots
+      ME_CONFIG_MONGODB_ADMINUSERNAME: jots
+      ME_CONFIG_MONGODB_ADMINPASSWORD: jots
     volumes:
       - mongodb-data:/data/db/
     ports:
-      - "27017:27017"
+      - "8081:8081"
     networks:
       - jots_network
-    command: [--auth]
