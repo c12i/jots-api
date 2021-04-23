@@ -19,6 +19,6 @@ services:
     volumes:
       - mongodb-data:/data/db/
     ports:
-      - "8081:8081"
+      - "27017:27017"
     networks:
       - jots_network
